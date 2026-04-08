@@ -1,6 +1,6 @@
 import { Edit2, Trash2, CheckCircle2, Clock, Inbox } from 'lucide-react'
 import axios from 'axios'
-import { ITask } from '../../../shared/types'
+import { ITask } from '../types'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 

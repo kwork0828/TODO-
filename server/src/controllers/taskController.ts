@@ -4,6 +4,9 @@ import { pushToSheets } from '../services/googleSheetsSync';
 import { checkAndUpdateOverdueTasks } from '../services/overdueService';
 import { startOfDay, endOfDay, startOfWeek, endOfWeek } from '../utils/dateUtils';
 
+const toPercent = (completed: number, total: number) =>
+  total > 0 ? Math.round((completed / total) * 100) : 0;
+
 // ─── GET /api/tasks ──────────────────────────────────────────────────────────
 // Supports ?category=X&status=Y&priority=Z&sort=newest|oldest|dueSoon|priority
 export const getTasks = async (req: Request, res: Response) => {
@@ -89,6 +92,7 @@ export const getStats = async (req: Request, res: Response) => {
       completedThisWeek,
       completedLastWeek,
       totalThisWeek,
+      totalLastWeek,
     ] = await Promise.all([
       Task.countDocuments(),
       Task.countDocuments({ status: 'overdue' }),
@@ -97,14 +101,11 @@ export const getStats = async (req: Request, res: Response) => {
       Task.countDocuments({ completedDate: { $gte: weekStart, $lte: weekEnd } }),
       Task.countDocuments({ completedDate: { $gte: lastWeekStart, $lte: lastWeekEnd } }),
       Task.countDocuments({ dueDate: { $gte: weekStart, $lte: weekEnd } }),
+      Task.countDocuments({ dueDate: { $gte: lastWeekStart, $lte: lastWeekEnd } }),
     ]);
 
-    const completionRateThisWeek = totalThisWeek > 0
-      ? Math.round((completedThisWeek / totalThisWeek) * 100)
-      : 0;
-    const completionRateLastWeek = totalThisWeek > 0
-      ? Math.round((completedLastWeek / totalThisWeek) * 100)
-      : 0;
+    const completionRateThisWeek = toPercent(completedThisWeek, totalThisWeek);
+    const completionRateLastWeek = toPercent(completedLastWeek, totalLastWeek);
 
     res.json({
       total,

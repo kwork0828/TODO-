@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowDownUp, CheckCircle2, Clock } from 'lucide-react';
-import { Priority, TaskStatus } from '../../../shared/types';
+import { Priority, TaskStatus } from '../types';
 
 interface Props {
   sortBy: string;

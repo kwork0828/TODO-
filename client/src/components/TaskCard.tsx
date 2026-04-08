@@ -1,6 +1,6 @@
 import React from 'react';
 import { MoreVertical, CheckCircle2, AlertCircle, Clock, Calendar, ChevronRight } from 'lucide-react';
-import { ITask, Priority, TaskStatus } from '../../../shared/types';
+import { ITask, Priority, TaskStatus } from '../types';
 import { format, formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
 

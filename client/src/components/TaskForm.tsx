@@ -1,14 +1,21 @@
 import { useState, useEffect } from 'react'
-import { X, Calendar, Clock, Tag, Flag, Plus, Check } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { X, Plus, Check } from 'lucide-react'
+import { motion } from 'framer-motion'
 import axios from 'axios'
-import { ITask, ICategory } from '../../../shared/types'
+import { ITask, ICategory } from '../types'
 
 interface Props {
   onClose: () => void
   onSubmit: () => void
   categories: ICategory[]
   editingTask?: ITask
+}
+
+const toDateTimeLocalValue = (value?: Date) => {
+  if (!value) return ''
+  const date = new Date(value)
+  const timezoneOffsetMs = new Date().getTimezoneOffset() * 60000
+  return new Date(date.getTime() - timezoneOffsetMs).toISOString().slice(0, 16)
 }
 
 const TaskForm = ({ onClose, onSubmit, categories, editingTask }: Props) => {
@@ -42,7 +49,7 @@ const TaskForm = ({ onClose, onSubmit, categories, editingTask }: Props) => {
     if (!formData.title?.trim()) return '제목을 입력해주세요.'
     if (!formData.dueDate) return '마감 기한을 선택해주세요.'
     if (formData.startDate && formData.dueDate && new Date(formData.dueDate) < new Date(formData.startDate)) {
-      return '마감 기한은 시작일보다 빨라야 합니다.'
+      return '마감 기한은 시작일보다 늦어야 합니다.'
     }
     return null
   }
@@ -189,7 +196,7 @@ const TaskForm = ({ onClose, onSubmit, categories, editingTask }: Props) => {
               <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-tight ml-1">시작일 (선택)</label>
               <input 
                 type="datetime-local"
-                value={formData.startDate ? new Date(new Date(formData.startDate).getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16) : ''}
+                value={toDateTimeLocalValue(formData.startDate)}
                 onChange={(e) => setFormData(prev => ({ ...prev, startDate: e.target.value ? new Date(e.target.value) : undefined }))}
                 className="w-full bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-100 dark:border-transparent rounded-xl px-4 py-3 text-sm dark:text-white outline-none focus:border-blue-500/50"
               />
@@ -198,7 +205,7 @@ const TaskForm = ({ onClose, onSubmit, categories, editingTask }: Props) => {
               <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-tight ml-1">마감 기한 (필수)</label>
               <input 
                 type="datetime-local"
-                value={formData.dueDate ? new Date(new Date(formData.dueDate).getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16) : ''}
+                value={toDateTimeLocalValue(formData.dueDate)}
                 onChange={(e) => setFormData(prev => ({ ...prev, dueDate: new Date(e.target.value) }))}
                 className="w-full bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-100 dark:border-transparent rounded-xl px-4 py-3 text-sm dark:text-white outline-none focus:border-blue-500/50"
               />

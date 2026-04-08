@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Calendar, LayoutGrid, Hash, RefreshCcw, Inbox, Menu, X, Upload, Download } from 'lucide-react';
-import { ICategory } from '../../../shared/types';
+import { ICategory } from '../types';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Props {

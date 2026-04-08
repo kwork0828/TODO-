@@ -1,6 +1,6 @@
 import React from 'react';
 import { X, Trash2, CheckCircle, Calendar, Hash, Flag, Type, Clock } from 'lucide-react';
-import { ITask } from '../../../shared/types';
+import { ITask } from '../types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';

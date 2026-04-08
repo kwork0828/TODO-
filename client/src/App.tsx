@@ -9,7 +9,7 @@ import TaskDetailModal from './components/TaskDetailModal'
 import TaskForm from './components/TaskForm'
 import CalendarView from './components/CalendarView'
 import DashboardStats, { DashboardStatsData } from './components/DashboardStats'
-import { ITask, ICategory, Priority, TaskStatus } from '../../shared/types'
+import { ITask, ICategory, Priority, TaskStatus } from './types'
 import { Inbox, LayoutGrid, Calendar as CalendarIcon } from 'lucide-react'
 
 const DEFAULT_STATS: DashboardStatsData = {
@@ -60,8 +60,8 @@ function App() {
         axios.get('/api/sync/status'),
         axios.get('/api/tasks/stats'),
       ]);
-      setTasks(tasksData);
-      setCategories(catsData);
+      setTasks(Array.isArray(tasksData) ? tasksData : []);
+      setCategories(Array.isArray(catsData) ? catsData : []);
       setSyncStatus(syncData);
       setStats(statsData);
       setFetchError(null);
