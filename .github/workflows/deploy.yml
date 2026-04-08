@@ -97,17 +97,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Railway CLI
-        run: npm install -g @railway/cli@latest
-
       - name: Deploy to Railway
         id: deploy
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway up --service=server --detach
-          RAILWAY_URL=$(railway domain --service=server 2>/dev/null || echo "${{ secrets.RAILWAY_PUBLIC_URL }}")
-          echo "railway_url=https://$RAILWAY_URL" >> $GITHUB_OUTPUT
+          # Trigger Railway deployment via GraphQL API
+          curl -s "https://backboard.railway.app/graphql/v2" \
+            -H "Authorization: Bearer $RAILWAY_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data-raw '{"query":"mutation { deploymentCreate(input: { serviceId: \"07e4728a-f7c3-4a46-b9c9-04fb4bf689d6\", environmentId: \"8f33c781-a1eb-418b-9534-6ce542fae161\" }) { id } }"}' \
+            | grep -q '"id"'
+          echo "railway_url=https://${{ secrets.RAILWAY_PUBLIC_URL }}" >> $GITHUB_OUTPUT
 
   # ── 4. Health checks ─────────────────────────────────────────────────────
   health-check:
