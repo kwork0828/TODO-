@@ -95,19 +95,11 @@ jobs:
     outputs:
       railway_url: ${{ steps.deploy.outputs.railway_url }}
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Deploy to Railway
+      - name: Confirm Railway deployment
         id: deploy
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          # Trigger Railway deployment via GraphQL API
-          curl -s "https://backboard.railway.app/graphql/v2" \
-            -H "Authorization: Bearer $RAILWAY_TOKEN" \
-            -H "Content-Type: application/json" \
-            --data-raw '{"query":"mutation { deploymentCreate(input: { serviceId: \"07e4728a-f7c3-4a46-b9c9-04fb4bf689d6\", environmentId: \"8f33c781-a1eb-418b-9534-6ce542fae161\" }) { id } }"}' \
-            | grep -q '"id"'
+          # Railway auto-deploys via GitHub integration on every push to main.
+          # Just surface the known service URL for downstream steps.
           echo "railway_url=https://${{ secrets.RAILWAY_PUBLIC_URL }}" >> $GITHUB_OUTPUT
 
   # ── 4. Health checks ─────────────────────────────────────────────────────
