@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { ICategory } from '../../../shared/types';
+import { ICategory } from '../types';
 
 export interface ICategoryDocument extends Omit<ICategory, '_id'>, Document {}
 

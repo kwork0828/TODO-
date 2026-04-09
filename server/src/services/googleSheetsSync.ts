@@ -2,7 +2,7 @@ import { google } from 'googleapis';
 import Task, { ITaskDocument } from '../models/Task';
 import Category from '../models/Category';
 import dotenv from 'dotenv';
-import { ITask } from '../../../shared/types';
+import { ITask } from '../types';
 
 dotenv.config();
 

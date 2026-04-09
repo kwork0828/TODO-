@@ -1,6 +1,11 @@
 import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import axios from 'axios'
+
+// Production: point to Render backend; dev: proxy via vite config
+if (import.meta.env.VITE_API_URL) {
+  axios.defaults.baseURL = import.meta.env.VITE_API_URL
+}
 import Sidebar from './components/Sidebar'
 import TopBar from './components/TopBar'
 import FilterBar from './components/FilterBar'

@@ -28,7 +28,10 @@
       "Bash(curl -s https://backboard.railway.app/graphql/v2 -H 'Authorization: Bearer 9b67cc2c-209c-49a4-8109-72d9facb0f72' -H 'Content-Type: application/json' --data-raw '{\"query\":\"{ deployment\\(id: \\\\\"edee68dc-b9dc-43b4-871e-8faa33c977c0\\\\\"\\) { id status meta } }\"}')",
       "Bash(curl -s https://backboard.railway.app/graphql/v2 -H 'Authorization: Bearer 9b67cc2c-209c-49a4-8109-72d9facb0f72' -H 'Content-Type: application/json' --data-raw '{\"query\":\"mutation { serviceInstanceUpdate\\(serviceId: \\\\\"07e4728a-f7c3-4a46-b9c9-04fb4bf689d6\\\\\", environmentId: \\\\\"8f33c781-a1eb-418b-9534-6ce542fae161\\\\\", input: { source: { image: \\\\\"ghcr.io/kwork0828/todo-server:latest\\\\\" } }\\) }\"}')",
       "Bash(curl -s https://backboard.railway.app/graphql/v2 -H 'Authorization: Bearer 9b67cc2c-209c-49a4-8109-72d9facb0f72' -H 'Content-Type: application/json' --data-raw '{\"query\":\"{ deployments\\(first: 3, input: { serviceId: \\\\\"07e4728a-f7c3-4a46-b9c9-04fb4bf689d6\\\\\" }\\) { edges { node { id status createdAt meta } } } }\"}')",
-      "Bash(xargs grep:*)"
+      "Bash(xargs grep:*)",
+      "Bash(RAILWAY_TOKEN=0177e02b-95c7-4f3c-a73b-3f3d6577350a railway whoami)",
+      "Bash(curl -s https://todo-8gur.onrender.com/api/health)",
+      "Bash(vercel env:*)"
     ]
   }
 }

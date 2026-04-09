@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { ITask } from '../../../shared/types';
+import { ITask } from '../types';
 
 export interface ITaskDocument extends Omit<ITask, '_id'>, Document {}
 
