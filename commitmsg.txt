@@ -1,0 +1,3 @@
+fix: switch Railway to GHCR image deployment with public visibility
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>

@@ -115,15 +115,34 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/todo-server:${{ github.sha }},ghcr.io/${{ github.repository_owner }}/todo-server:latest
 
-      - name: Deploy image to Railway
+      - name: Make GHCR image public
+        run: |
+          # Get package version IDs and make the package public
+          curl -s -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/user/packages/container/todo-server" \
+            -d '{"visibility":"public"}' || true
+
+      - name: Connect Railway to Docker image & deploy
         id: deploy
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
+          IMAGE="ghcr.io/${{ github.repository_owner }}/todo-server:${{ github.sha }}"
+
+          # Switch service source to Docker image
           curl -s "https://backboard.railway.app/graphql/v2" \
             -H "Authorization: Bearer $RAILWAY_TOKEN" \
             -H "Content-Type: application/json" \
-            --data-raw "{\"query\":\"mutation { serviceInstanceUpdate(serviceId: \\\"07e4728a-f7c3-4a46-b9c9-04fb4bf689d6\\\", environmentId: \\\"8f33c781-a1eb-418b-9534-6ce542fae161\\\", input: { image: \\\"ghcr.io/${{ github.repository_owner }}/todo-server:${{ github.sha }}\\\" }) }\"}"
+            -d "{\"query\":\"mutation { serviceConnect(id: \\\"07e4728a-f7c3-4a46-b9c9-04fb4bf689d6\\\", input: { image: \\\"$IMAGE\\\" }) { id } }\"}"
+
+          # Trigger deployment
+          curl -s "https://backboard.railway.app/graphql/v2" \
+            -H "Authorization: Bearer $RAILWAY_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{"query":"mutation { serviceInstanceRedeploy(serviceId: \"07e4728a-f7c3-4a46-b9c9-04fb4bf689d6\", environmentId: \"8f33c781-a1eb-418b-9534-6ce542fae161\") }"}'
+
           echo "railway_url=https://${{ secrets.RAILWAY_PUBLIC_URL }}" >> $GITHUB_OUTPUT
 
   # ── 4. Health checks ─────────────────────────────────────────────────────
