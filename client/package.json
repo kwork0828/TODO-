@@ -15,7 +15,7 @@
     "@fullcalendar/interaction": "^6.1.11",
     "@fullcalendar/react": "^6.1.10",
     "@fullcalendar/timegrid": "^6.1.11",
-    "axios": "^1.6.8",
+    "axios": "^1.15.0",
     "clsx": "^2.1.0",
     "date-fns": "^3.6.0",
     "framer-motion": "^11.0.24",
